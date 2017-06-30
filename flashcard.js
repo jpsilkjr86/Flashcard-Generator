@@ -37,5 +37,14 @@ var inquirer = require('inquirer');
 // imports inquirerQuestions object
 var inquirerQuestions = require('./inquirer-questions.js');
 
-console.log(inquirerQuestions.createOrPractice);
-console.log(inquirerQuestions.basicOrClozed);
+// initialize prompt
+var prompt = inquirer.createPromptModule();
+
+prompt(inquirerQuestions.createOrPractice).then(function(answers){
+	console.log(answers);
+
+	prompt(inquirerQuestions.basicOrClozed).then(function(answers){
+		console.log(answers);
+	});
+});
+
