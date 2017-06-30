@@ -32,5 +32,10 @@
 */
 
 // imports inquirer
+var inquirer = require('inquirer');
 
 // imports inquirerQuestions object
+var inquirerQuestions = require('./inquirer-questions.js');
+
+console.log(inquirerQuestions.createOrPractice);
+console.log(inquirerQuestions.basicOrClozed);
