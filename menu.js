@@ -44,12 +44,10 @@ var menu = {
 		ask: function() {
 			prompt(menu.cardType.questions).then(function(answers){
 				if (answers.choice === 'Basic flashcard') {
-					var newBasicCard = BasicCard();
 					menu.basicCardPrompt.ask();
 				}
 
 				if (answers.choice === 'Cloze deleted flashcard') {
-					var newClozeDeletedCard = ClozeDeletedCard();
 					menu.clozeDeletedCardPrompt.ask();
 				}
 			});
@@ -89,9 +87,12 @@ var menu = {
 		// prompt function
 		ask: function() {
 			prompt(menu.basicCardPrompt.questions).then(function(answers){
+				// creates new basic card object (scope safety ensured in constructor)
+				let newBasicCard = BasicCard(answers.front, answers.back);
+
 				console.log('\nBasic flashcard successfully created!'
-					+ '\nFront side: ' + answers.front
-					+ '\nBack side: ' + answers.back + '\n');
+					+ '\nFront side: ' + newBasicCard.front
+					+ '\nBack side: ' + newBasicCard.back + '\n');
 			});
 		}
 	}, // end of menu.basicCardPrompt
@@ -136,9 +137,12 @@ var menu = {
 		// prompt function
 		ask: function() {
 			prompt(menu.clozeDeletedCardPrompt.questions).then(function(answers){
+				// creates new cloze-deleted card object (scope safety ensured in constructor)
+				let newClozeDeletedCard = ClozeDeletedCard(answers.fullAnswer, answers.omittedPart);
+
 				console.log('\nCloze-deleted flashcard successfully created!'
-					+ '\nOmitted part: ' + answers.omittedPart
-					+ '\nFull answer: ' + answers.fullAnswer + '\n');
+					+ '\nOmitted part: ' + newClozeDeletedCard.omittedPart
+					+ '\nFull answer: ' + newClozeDeletedCard.fullAnswer + '\n');
 			});
 		}
 	}
