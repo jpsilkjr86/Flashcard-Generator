@@ -45,13 +45,13 @@ var menu = {
 			prompt(menu.cardType.questions).then(function(answers){
 				if (answers.choice === 'Basic flashcard') {
 					// return console.log('Chose to create basic flashcard...');
-					var newCard = new BasicCard;
+					var newCard = BasicCard('hihi');
 					newCard.ask();
 				}
 
 				if (answers.choice === 'Cloze deleted flashcard') {
 					// return console.log('Chose to create loze deleted flashcard...');
-					var newCard = new ClozeDeletedCard;
+					var newCard = ClozeDeletedCard('hellohello');
 					newCard.ask();
 				}
 			});
