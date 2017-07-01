@@ -10,16 +10,11 @@ var ClozeDeletedCard = function(fullAnswer, omittedPart) {
 
 	this.fullAnswer = fullAnswer;
 	this.omittedPart = omittedPart;
-	// initial values for front and back set. back is always the same as fullAnswer
-	this.front = '';
-	this.back = fullAnswer;
-};
 
-ClozeDeletedCard.prototype.updateFrontOfCard = function() {
-	// replaces omitted part of full answer with ellipsis '...'
+	// front is the omittedPart of fullAnswer replaced with '...'
+	// back is always the same as fullAnswer
 	this.front = this.fullAnswer.replace(this.omittedPart, '...');
-
-	console.log('front: ' + this.front);
+	this.back = fullAnswer;
 };
 
 ClozeDeletedCard.prototype.addToDeck = function() {

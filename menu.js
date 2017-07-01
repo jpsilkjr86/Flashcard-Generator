@@ -2,7 +2,7 @@
 var inquirer = require('inquirer');
 
 // initializes inquirer prompt
-var prompt = inquirer.createPromptModule();		
+var prompt = inquirer.createPromptModule();
 
 // imports BasicCard constructor
 var BasicCard = require('./basic-card.js');
@@ -143,9 +143,6 @@ var menu = {
 			prompt(menu.clozeDeletedCardPrompt.questions).then(function(answers){
 				// creates new cloze-deleted card object (scope safety ensured in constructor)
 				let newClozeDeletedCard = ClozeDeletedCard(answers.fullAnswer, answers.omittedPart);
-
-				// runs the algorithm to replace the omitted part with ellipsis on the front of the card
-				newClozeDeletedCard.updateFrontOfCard();
 
 				console.log('\nCloze-deleted flashcard successfully created!'
 					+ '\nFront: ' + newClozeDeletedCard.front

@@ -13,7 +13,7 @@ var BasicCard = function(front, back) {
 };
 
 BasicCard.prototype.addToDeck = function() {
-	console.log(fs.existsSync('./your-cards.txt'));
+	fs.existsSync('./your-cards.txt');
 };
 
 module.exports = BasicCard;
