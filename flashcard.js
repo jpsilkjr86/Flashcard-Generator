@@ -34,5 +34,5 @@
 // imports mainMenu object
 var menu = require('./menu.js');
 
-// start by displaying the main menu question
+// starts program by displaying the main menu prompt
 menu.main.ask();

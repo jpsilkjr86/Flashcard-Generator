@@ -10,6 +10,7 @@ var BasicCard = require('./basic-card.js');
 // imports ClozeDeletedCard constructor
 var ClozeDeletedCard = require('./cloze-deleted-card.js');
 
+// menu object containing all user prompt information
 var menu = {
 	// main menu, first question user must answer
 	main: {
@@ -63,7 +64,7 @@ var menu = {
 			name: 'front',
 			validate: function(str) {
 				if (str == null || str == '') {
-					console.log('\n\nEmpty content is not a valid input value.\n\n')
+					console.log('\n\nEmpty content is not a valid input value.\n')
 					return false;
 				}
 				return true;
@@ -74,11 +75,11 @@ var menu = {
 			name: 'back',
 			validate: function(str, hash) {
 				if (str == null || str == '') {
-					console.log('\n\nEmpty content is not a valid input value.\n\n')
+					console.log('\n\nEmpty content is not a valid input value.\n')
 					return false;
 				}
 				if (str === hash.front) {
-					console.log('\n\nThe front of the card may not be the same as the back of the card.\n\n');
+					console.log('\n\nThe front of the card may not be the same as the back of the card.\n');
 					return false;
 				}
 				return true;
@@ -106,7 +107,7 @@ var menu = {
 			name: 'fullAnswer',
 			validate: function(str) {
 				if (str == null || str == '') {
-					console.log('\n\nEmpty content is not a valid input value.\n\n')
+					console.log('\n\nEmpty content is not a valid input value.\n')
 					return false;
 				}
 				return true;
@@ -117,18 +118,18 @@ var menu = {
 			name: 'omittedPart',
 			validate: function(str, hash) {
 				if (str == null || str == '') {
-					console.log('\n\nEmpty content is not a valid input value.\n\n')
+					console.log('\n\nEmpty content is not a valid input value.\n')
 					return false;
 				}
 				// makes sure that the omitted part is a subset of the full answer
 				if (hash.fullAnswer.search(str) === -1) {
 					console.log('\n\n"' + str + '" is not a part of the full answer, "'
-						+ hash.fullAnswer + '".\nPlease make sure your input is a subset of the full answer.\n\n')
+						+ hash.fullAnswer + '".\nPlease make sure your input is a subset of the full answer.\n')
 					return false;
 				}
 				// makes sure that the omitted part is not equal to the full string of the full answer
 				if (hash.fullAnswer === str) {
-					console.log('\n\nThe omitted part may not be equal to the full answer.\n\n');
+					console.log('\n\nThe omitted part may not be equal to the full answer.\n');
 					return false;
 				}
 				return true;
@@ -143,6 +144,8 @@ var menu = {
 				console.log('\nCloze-deleted flashcard successfully created!'
 					+ '\nOmitted part: ' + newClozeDeletedCard.omittedPart
 					+ '\nFull answer: ' + newClozeDeletedCard.fullAnswer + '\n');
+				// runs the algorithm to replace the omitted part with ellipsis on the front of the card
+				newClozeDeletedCard.updateFrontOfCard();
 			});
 		}
 	}

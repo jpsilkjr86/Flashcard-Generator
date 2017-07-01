@@ -11,10 +11,14 @@ var ClozeDeletedCard = function(fullAnswer, omittedPart) {
 
 	this.fullAnswer = fullAnswer;
 	this.omittedPart = omittedPart;
+	this.front = '';
 };
 
-ClozeDeletedCard.prototype.ask = function() {
+ClozeDeletedCard.prototype.updateFrontOfCard = function() {
+	// replaces omitted part of full answer with ellipsis '...'
+	this.front = this.fullAnswer.replace(this.omittedPart, '...');
 
+	console.log('front: ' + this.front);
 };
 
 module.exports = ClozeDeletedCard;
