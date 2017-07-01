@@ -92,8 +92,11 @@ var menu = {
 				let newBasicCard = BasicCard(answers.front, answers.back);
 
 				console.log('\nBasic flashcard successfully created!'
-					+ '\nFront side: ' + newBasicCard.front
-					+ '\nBack side: ' + newBasicCard.back + '\n');
+					+ '\nFront: ' + newBasicCard.front
+					+ '\nBack: ' + newBasicCard.back + '\n');
+
+				// appends to your-cards.txt
+				newBasicCard.addToDeck();
 			});
 		}
 	}, // end of menu.basicCardPrompt
@@ -141,11 +144,14 @@ var menu = {
 				// creates new cloze-deleted card object (scope safety ensured in constructor)
 				let newClozeDeletedCard = ClozeDeletedCard(answers.fullAnswer, answers.omittedPart);
 
-				console.log('\nCloze-deleted flashcard successfully created!'
-					+ '\nOmitted part: ' + newClozeDeletedCard.omittedPart
-					+ '\nFull answer: ' + newClozeDeletedCard.fullAnswer + '\n');
 				// runs the algorithm to replace the omitted part with ellipsis on the front of the card
 				newClozeDeletedCard.updateFrontOfCard();
+
+				console.log('\nCloze-deleted flashcard successfully created!'
+					+ '\nFront: ' + newClozeDeletedCard.front
+					+ '\nBack: ' + newClozeDeletedCard.back + '\n');
+
+				newClozeDeletedCard.addToDeck();
 			});
 		}
 	}

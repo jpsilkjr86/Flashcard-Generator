@@ -1,6 +1,5 @@
-// inquirer needed for this module
-var inquirer = require('inquirer');
-var prompt = inquirer.createPromptModule();
+// imports fs
+var fs = require('fs');
 
 // declares BasicCard constructor
 var BasicCard = function(front, back) {
@@ -11,6 +10,10 @@ var BasicCard = function(front, back) {
 
 	this.front = front;
 	this.back = back;
+};
+
+BasicCard.prototype.addToDeck = function() {
+	console.log(fs.existsSync('./your-cards.txt'));
 };
 
 module.exports = BasicCard;
