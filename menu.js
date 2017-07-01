@@ -65,7 +65,7 @@ var menu = {
 			name: 'front',
 			validate: function(str) {
 				if (str == null || str == '') {
-					console.log('\n\nEmpty content is not a valid input value.\n')
+					console.log('\n\nEmpty content is not a valid input value.\n\n')
 					return false;
 				}
 				return true;
@@ -76,11 +76,11 @@ var menu = {
 			name: 'back',
 			validate: function(str, hash) {
 				if (str == null || str == '') {
-					console.log('\n\nEmpty content is not a valid input value.\n')
+					console.log('\n\nEmpty content is not a valid input value.\n\n')
 					return false;
 				}
 				if (str === hash.front) {
-					console.log('\n\nThe front of the card may not be the same as the back of the card.\n');
+					console.log('\n\nThe front of the card may not be the same as the back of the card.\n\n');
 					return false;
 				}
 				return true;
@@ -97,7 +97,50 @@ var menu = {
 	}, // end of menu.basicCardPrompt
 	// cloze deleted card prompt content
 	clozeDeletedCardPrompt: {
-
+		questions: [
+		// first question
+		{
+			type: 'input',
+			message: 'What is the complete sentence answer to this flashcard?',
+			name: 'fullAnswer',
+			validate: function(str) {
+				if (str == null || str == '') {
+					console.log('\n\nEmpty content is not a valid input value.\n\n')
+					return false;
+				}
+				return true;
+			}
+		},{ // second question
+			type: 'input',
+			message: 'Which part of the full answer would you like to be omitted via ellipsis?',
+			name: 'omittedPart',
+			validate: function(str, hash) {
+				if (str == null || str == '') {
+					console.log('\n\nEmpty content is not a valid input value.\n\n')
+					return false;
+				}
+				// makes sure that the omitted part is a subset of the full answer
+				if (hash.fullAnswer.search(str) === -1) {
+					console.log('\n\n"' + str + '" is not a part of the full answer, "'
+						+ hash.fullAnswer + '".\nPlease make sure your input is a subset of the full answer.\n\n')
+					return false;
+				}
+				// makes sure that the omitted part is not equal to the full string of the full answer
+				if (hash.fullAnswer === str) {
+					console.log('\n\nThe omitted part may not be equal to the full answer.\n\n');
+					return false;
+				}
+				return true;
+			}
+		}],
+		// prompt function
+		ask: function() {
+			prompt(menu.clozeDeletedCardPrompt.questions).then(function(answers){
+				console.log('\nCloze-deleted flashcard successfully created!'
+					+ '\nOmitted part: ' + answers.omittedPart
+					+ '\nFull answer: ' + answers.fullAnswer + '\n');
+			});
+		}
 	}
 };
 
