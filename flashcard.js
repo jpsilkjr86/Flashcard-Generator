@@ -31,20 +31,8 @@
 
 */
 
-// imports inquirer
-var inquirer = require('inquirer');
+// imports mainMenu object
+var menu = require('./menu.js');
 
-// imports inquirerQuestions object
-var inquirerQuestions = require('./inquirer-questions.js');
-
-// initialize prompt
-var prompt = inquirer.createPromptModule();
-
-prompt(inquirerQuestions.createOrPractice).then(function(answers){
-	console.log(answers);
-
-	prompt(inquirerQuestions.basicOrClozed).then(function(answers){
-		console.log(answers);
-	});
-});
-
+// start by displaying the main menu question
+menu.main.ask();
