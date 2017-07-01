@@ -1,14 +1,14 @@
 // imports inquirer
 var inquirer = require('inquirer');
 
+// initializes prompt
+var prompt = inquirer.createPromptModule();		
+
 // imports BasicCard constructor
 var BasicCard = require('./basic-card.js');
 
 // imports ClozeDeletedCard constructor
 var ClozeDeletedCard = require('./cloze-deleted-card.js');
-
-// initializes prompt
-var prompt = inquirer.createPromptModule();		
 
 var menu = {
 	// main menu, first question user must answer
