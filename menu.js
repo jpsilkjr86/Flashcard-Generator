@@ -1,7 +1,7 @@
 // imports inquirer
 var inquirer = require('inquirer');
 
-// initializes prompt
+// initializes inquirer prompt
 var prompt = inquirer.createPromptModule();		
 
 // imports BasicCard constructor
@@ -31,7 +31,7 @@ var menu = {
 				}
 			});
 		}
-	},
+	}, // end of menu.main
 	// menu for choosing a card type
 	cardType: {
 		questions: [{
@@ -40,23 +40,65 @@ var menu = {
 			choices: ['Basic flashcard', 'Cloze deleted flashcard'],
 			name: 'choice'
 		}],
-
+		// prompt function
 		ask: function() {
 			prompt(menu.cardType.questions).then(function(answers){
 				if (answers.choice === 'Basic flashcard') {
-					// return console.log('Chose to create basic flashcard...');
-					var newCard = BasicCard('hihi');
-					newCard.ask();
+					var newBasicCard = BasicCard();
+					menu.basicCardPrompt.ask();
 				}
 
 				if (answers.choice === 'Cloze deleted flashcard') {
-					// return console.log('Chose to create loze deleted flashcard...');
-					var newCard = ClozeDeletedCard('hellohello');
-					newCard.ask();
+					var newClozeDeletedCard = ClozeDeletedCard();
+					menu.clozeDeletedCardPrompt.ask();
 				}
 			});
 		}
-	},
+	}, // end of menu.cardType
+	// basic card prompt content
+	basicCardPrompt: {
+		questions: [
+		// first question
+		{
+			type: 'input',
+			message: 'What text would you like on the front of the card?',
+			name: 'front',
+			validate: function(str) {
+				if (str == null || str == '') {
+					console.log('\n\nEmpty content is not a valid input value.\n')
+					return false;
+				}
+				return true;
+			}
+		},{ // second question
+			type: 'input',
+			message: 'What text would you like on the back of the card?',
+			name: 'back',
+			validate: function(str, hash) {
+				if (str == null || str == '') {
+					console.log('\n\nEmpty content is not a valid input value.\n')
+					return false;
+				}
+				if (str === hash.front) {
+					console.log('\n\nThe front of the card may not be the same as the back of the card.\n');
+					return false;
+				}
+				return true;
+			}
+		}],
+		// prompt function
+		ask: function() {
+			prompt(menu.basicCardPrompt.questions).then(function(answers){
+				console.log('\nBasic flashcard successfully created!'
+					+ '\nFront side: ' + answers.front
+					+ '\nBack side: ' + answers.back + '\n');
+			});
+		}
+	}, // end of menu.basicCardPrompt
+	// cloze deleted card prompt content
+	clozeDeletedCardPrompt: {
+
+	}
 };
 
 module.exports = menu;

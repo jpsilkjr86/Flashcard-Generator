@@ -3,17 +3,18 @@ var inquirer = require('inquirer');
 var prompt = inquirer.createPromptModule();
 
 // declares ClozeDeletedCard constructor
-var ClozeDeletedCard = function(str) {
+var ClozeDeletedCard = function() {
 	// checks right away to see if it's not already an instance of the constructor
 	if (!(this instanceof ClozeDeletedCard)) {
-		return new ClozeDeletedCard(str);
+		return new ClozeDeletedCard;
 	}
-	
-	this.hi = str;
+
+	this.front = '';
+	this.back = '';
 };
 
 ClozeDeletedCard.prototype.ask = function() {
-	return console.log(this.hi);
+
 };
 
 module.exports = ClozeDeletedCard;
