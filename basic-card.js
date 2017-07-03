@@ -1,6 +1,3 @@
-// imports fs
-var fs = require('fs');
-
 // imports deck object
 var deck = require('./deck.js');
 
@@ -19,37 +16,7 @@ BasicCard.prototype.addToDeck = function() {
 	// set variables: contents is the stringified flashcard object,
 	// numOfCardsInDeck is the return value of deck.numOfCards() function.
 	let thisCard = this;
-	let contents = JSON.stringify(thisCard);
-	let numOfCardsInDeck = deck.numOfCards('./your-cards.txt');
-
-	// if the number of cards in the deck equals zero,
-	// writes / overwrites a new deck with the stringified contents.
-	if (numOfCardsInDeck === 0) {
-		fs.writeFile('./your-cards.txt', contents, function(err) {
-			if (err) {
-				return console.log(err);
-			}
-
-			console.log('\nFlashcard successfully created!'
-				+ '\nFront: ' + thisCard.front
-				+ '\nBack: ' + thisCard.back + '\n');
-		});
-	}
-
-	// if the number of cards in the deck is greater than zero,
-	// *appends* stringified card object with && at the front (for
-	// convenience in JSON parsing later on) to the designated file.
-	if (numOfCardsInDeck > 0) {
-		fs.appendFile('./your-cards.txt', '&&' + contents, function(err) {
-			if (err) {
-				return console.log(err);
-			}
-
-			console.log('\nFlashcard successfully created!'
-				+ '\nFront: ' + thisCard.front
-				+ '\nBack: ' + thisCard.back + '\n');
-		});
-	}
+	deck.add(thisCard);
 };
 
 module.exports = BasicCard;

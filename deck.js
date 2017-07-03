@@ -3,27 +3,65 @@ var fs = require('fs');
 
 // declares deck object
 var deck = {
+	// filepath of flashcard deck
+	filepath: './your-cards.txt',
+	// method for adding a card to the deck
+	add: function(cardObject) {
+		// sets variables: contents is stringified card object,
+		// numOfCardsInDeck comes from deck.numOfCards()
+		let contents = JSON.stringify(cardObject);
+		let numOfCardsInDeck = deck.numOfCards();
+
+		// if the number of cards in the deck equals zero,
+		// writes / overwrites a new deck with the stringified contents.
+		if (numOfCardsInDeck === 0) {
+			fs.writeFile(this.filepath, contents, function(err) {
+				if (err) {
+					return console.log(err);
+				}
+
+				console.log('\nFlashcard successfully created!'
+					+ '\nFront: ' + cardObject.front
+					+ '\nBack: ' + cardObject.back + '\n');
+			});
+		}
+
+		// if the number of cards in the deck is greater than zero,
+		// *appends* stringified card object with && at the front (for
+		// convenience in JSON parsing later on) to the designated file.
+		if (numOfCardsInDeck > 0) {
+			fs.appendFile(this.filepath, '&&' + contents, function(err) {
+				if (err) {
+					return console.log(err);
+				}
+
+				console.log('\nFlashcard successfully created!'
+					+ '\nFront: ' + cardObject.front
+					+ '\nBack: ' + cardObject.back + '\n');
+			});
+		}
+	}, // end of deck.add()
 	// algorithm that returns the number of cards in the user's deck
-	numOfCards: function(filePath) {
+	numOfCards: function() {
 		// returns the length of returned array from deck.getCards()
-		let cardsAry = deck.getCards(filePath);
+		let cardsAry = deck.getCards();
 		console.log(cardsAry.length);
 		return cardsAry.length;
 	},
-	// algorith that returns an array of flashcard objects in designated filePath
-	getCards: function(filePath) {
+	// algorith that returns an array of flashcard objects
+	getCards: function() {
 		// declares variables with empty values
 		let dataStr = '';
 		let dataAry = [];
 
 		// returns empty array if the filepath doesn't exist
-		if (!fs.existsSync(filePath)) {
+		if (!fs.existsSync(this.filepath)) {
 			return (dataAry = []);
 		}
 
-		// sets dataStr equal to contents of filePath and dataAry equal to dataStr
+		// sets dataStr equal to contents of filepath and dataAry equal to dataStr
 		// split at '&&'. .split works regardless if the file can find '&&' or not.
-		dataStr = fs.readFileSync(filePath, 'utf8');
+		dataStr = fs.readFileSync(this.filepath, 'utf8');
 		dataAry = dataStr.split('&&');
 
 		// tries splitting array, looping through it and JSON-parsing each object within it.

@@ -144,10 +144,6 @@ var menu = {
 				// creates new cloze-deleted card object (scope safety ensured within constructor itself)
 				let newCard = ClozeCard(answers.fullAnswer, answers.omittedPart);
 
-				console.log('\nFlashcard successfully created!'
-					+ '\nFront: ' + newCard.front
-					+ '\nBack: ' + newCard.back + '\n');
-
 				// appends to your-cards.txt
 				newCard.addToDeck();
 			});

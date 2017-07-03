@@ -1,7 +1,7 @@
-// imports fs
-var fs = require('fs');
+// imports deck object
+var deck = require('./deck.js');
 
-// imports BasicCard in case constructor is called incorrectly.
+// imports BasicCard as a backup in case constructor is given invalid arguments.
 var BasicCard = require('./basic-card.js');
 
 // declares ClozeCard constructor
@@ -30,7 +30,10 @@ var ClozeCard = function(fullAnswer, omittedPart) {
 };
 
 ClozeCard.prototype.addToDeck = function() {
-	console.log(fs.existsSync('./your-cards.txt'));
+	// set variables: contents is the stringified flashcard object,
+	// numOfCardsInDeck is the return value of deck.numOfCards() function.
+	let thisCard = this;
+	deck.add(thisCard);
 };
 
 module.exports = ClozeCard;
