@@ -45,7 +45,6 @@ var deck = {
 	numOfCards: function() {
 		// returns the length of returned array from deck.getCards()
 		let cardsAry = deck.getCards();
-		console.log(cardsAry.length);
 		return cardsAry.length;
 	},
 	// algorith that returns an array of flashcard objects

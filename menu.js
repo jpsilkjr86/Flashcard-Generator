@@ -1,14 +1,14 @@
+// ****************************** FRONT-END FUNCTIONALITY ******************************
 // imports inquirer
 var inquirer = require('inquirer');
 
 // initializes inquirer prompt
 var prompt = inquirer.createPromptModule();
 
-// imports BasicCard constructor
+// imports BasicCard constructor, ClozeCard constructor, and deck object on the back-end
 var BasicCard = require('./basic-card.js');
-
-// imports ClozeCard constructor
 var ClozeCard = require('./cloze-card.js');
+var deck = require('./deck.js');
 
 // menu object containing all user prompt information
 var menu = {
@@ -27,8 +27,8 @@ var menu = {
 					return menu.cardType.ask();
 				}
 				if (answers.choice === 'Practice your flashcards.') {
-					console.log('Practice card feature still in development...');
-					return menu.main.ask();
+					// console.log('Practice card feature still in development...');
+					return menu.practiceFlashcards();
 				}
 			});
 		}
@@ -95,6 +95,8 @@ var menu = {
 
 				// appends to your-cards.txt
 				newCard.addToDeck();
+
+				return menu.main.ask();
 			});
 		}
 	}, // end of menu.basicCardPrompt
@@ -146,8 +148,27 @@ var menu = {
 
 				// appends to your-cards.txt
 				newCard.addToDeck();
+
+				return menu.main.ask();
 			});
 		}
+	}, // end of menu.clozeCardPrompt
+	practiceFlashcards: function() {
+		let allCards = deck.getCards();
+
+		if (allCards.length === 0) {
+			console.log('\nThere are currently no flashcards in this deck.\n'
+				+ 'Please create some flashcards first and come back later to practice!\n');
+			return menu.main.ask();
+		}
+
+		if (allCards.length === 1) {
+			console.log('\n\nYou currently have 1 flashcard in your deck.\n');
+			return menu.main.ask();
+		}
+		
+		console.log('\n\nYou currently have ' + allCards.length + ' flashcards in your deck.\n');
+		return menu.main.ask();
 	}
 };
 
