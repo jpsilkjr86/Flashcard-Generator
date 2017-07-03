@@ -20,7 +20,7 @@ var menu = {
 			choices: ['Create a new flashcard.', 'Practice your flashcards.'],
 			name: 'choice'
 		}],
-
+		// prompt function for menu.main
 		ask: function() {
 			prompt(menu.main.questions).then(function(answers){
 				if (answers.choice === 'Create a new flashcard.') {
@@ -41,7 +41,7 @@ var menu = {
 			choices: ['Basic flashcard', 'Cloze flashcard'],
 			name: 'choice'
 		}],
-		// prompt function
+		// prompt function for menu.cardType
 		ask: function() {
 			prompt(menu.cardType.questions).then(function(answers){
 				if (answers.choice === 'Basic flashcard') {
@@ -87,15 +87,11 @@ var menu = {
 				return true;
 			}
 		}],
-		// prompt function
+		// prompt function for menu.basicCardPrompt
 		ask: function() {
 			prompt(menu.basicCardPrompt.questions).then(function(answers){
 				// creates new basic card object (scope safety ensured within constructor itself)
 				let newCard = BasicCard(answers.front, answers.back);
-
-				console.log('\nFlashcard successfully created!'
-					+ '\nFront: ' + newCard.front
-					+ '\nBack: ' + newCard.back + '\n');
 
 				// appends to your-cards.txt
 				newCard.addToDeck();
@@ -142,7 +138,7 @@ var menu = {
 				return true;
 			}
 		}],
-		// prompt function
+		// prompt function for menu.clozeCardPrompt
 		ask: function() {
 			prompt(menu.clozeCardPrompt.questions).then(function(answers){
 				// creates new cloze-deleted card object (scope safety ensured within constructor itself)
@@ -152,6 +148,7 @@ var menu = {
 					+ '\nFront: ' + newCard.front
 					+ '\nBack: ' + newCard.back + '\n');
 
+				// appends to your-cards.txt
 				newCard.addToDeck();
 			});
 		}
