@@ -3,58 +3,50 @@ var fs = require('fs');
 
 // declares deck object
 var deck = {
-	// algorithm to make sure the user has a working deck 
+	// algorithm that returns the number of cards in the user's deck
 	numOfCards: function(filePath) {
-		// declare empty data variables dataStr, dataObj, dataAry
+		// returns the length of returned array from deck.getCards()
+		let cardsAry = deck.getCards(filePath);
+		console.log(cardsAry.length);
+		return cardsAry.length;
+	},
+	// algorith that returns an array of flashcard objects in designated filePath
+	getCards: function(filePath) {
+		// declares variables with empty values
 		let dataStr = '';
-		let dataObj = {};
 		let dataAry = [];
-		let totalCards = 0;
 
-		// if the file doesn't exist, return 0.
-		if (!(fs.existsSync(filePath))) {
-			return (totalCards = 0);
+		// returns empty array if the filepath doesn't exist
+		if (!fs.existsSync(filePath)) {
+			return (dataAry = []);
 		}
 
-		// try saving the data as a string, then JSON-parsing it directly and reading
-		// the property 'front'. if everything checks out, set totalCards = 1.
+		// sets dataStr equal to contents of filePath and dataAry equal to dataStr
+		// split at '&&'. .split works regardless if the file can find '&&' or not.
+		dataStr = fs.readFileSync(filePath, 'utf8');
+		dataAry = dataStr.split('&&');
+
+		// tries splitting array, looping through it and JSON-parsing each object within it.
+		// If loop finds data that is missing or corrupted, it will throw an error.
 		try {
-			dataStr = fs.readFileSync(filePath, 'utf8');
-			dataObj = JSON.parse(dataStr);
+			for (let i = 0; i < dataAry.length; i++) {
 
-			if (dataObj.hasOwnProperty('front')) {
-				totalCards = 1;
-			}
-		}
-		catch (err) {
-			// if the first attempt above yields an error, try splitting the data by '&&'
-			// and looping through the array. increment totalCards by 1 for each valid card
-			// object. If there's any error or corrupted data, return totalCards = 0.
-			try {
-				dataStr = fs.readFileSync(filePath, 'utf8');
-				dataAry = dataStr.split('&&');
+				dataAry[i] = JSON.parse(dataAry[i]);
 
-				for (let i = 0; i < dataAry.length; i++) {
-					// JSON parse each element of the array
-					dataAry[i] = JSON.parse(dataAry[i]);
-
-					// return 0 if any data element doesn't have 'front' or 'back' properties.
-					// no point in trying to read corrupted data.
-					if (!dataAry[i].hasOwnProperty('front')
-					 || !dataAry[i].hasOwnProperty('back')) {
-						return (totalCards = 0);
-					}
-					// increment by default, meaning everything is checking out so far.
-					totalCards++;
+				// throws an error if any data element doesn't have 'front' or 'back' properties.
+				if (!(dataAry[i].hasOwnProperty('front') && dataAry[i].hasOwnProperty('back'))) {
+					throw 'Deck data does not exist and/or has been corrupted.';
 				}
 			}
-			catch (err) {
-				totalCards = 0;
-			}
 		}
-		// default is to return totalCards
-		return totalCards;
-	} // end of deck.numOfCards
+		// if any error occured above, dataAry will be an empty array.
+		catch (err) {
+			dataAry = [];
+		}
+		finally {
+			return dataAry;
+		}
+	} // end of deck.getCards()
 };
 
 module.exports = deck;

@@ -16,14 +16,14 @@ var BasicCard = function(front, back) {
 };
 
 BasicCard.prototype.addToDeck = function() {
-	// set variables: contents is the stringified flashcard object.
+	// set variables: contents is the stringified flashcard object,
 	// numOfCardsInDeck is the return value of deck.numOfCards() function.
 	let thisCard = this;
 	let contents = JSON.stringify(thisCard);
 	let numOfCardsInDeck = deck.numOfCards('./your-cards.txt');
 
 	// if the number of cards in the deck equals zero,
-	// write / overwrite a new deck with the stringified contents.
+	// writes / overwrites a new deck with the stringified contents.
 	if (numOfCardsInDeck === 0) {
 		fs.writeFile('./your-cards.txt', contents, function(err) {
 			if (err) {
@@ -37,7 +37,7 @@ BasicCard.prototype.addToDeck = function() {
 	}
 
 	// if the number of cards in the deck is greater than zero,
-	// *append* stringified card object with && at the front (for
+	// *appends* stringified card object with && at the front (for
 	// convenience in JSON parsing later on) to the designated file.
 	if (numOfCardsInDeck > 0) {
 		fs.appendFile('./your-cards.txt', '&&' + contents, function(err) {
