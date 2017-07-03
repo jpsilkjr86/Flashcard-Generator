@@ -156,7 +156,7 @@ var menu = {
 	// segment of menu front-end that handles flashcard practicing
 	practiceFlashcards: {
 		startScreen: function() {
-			let allCards = deck.getCards();
+			const allCards = deck.getCards();
 			let cardNumMessage = '';
 
 			// sets the cardNumMessage portion of the startScreen
@@ -179,21 +179,70 @@ var menu = {
 			{
 				type: 'confirm',
 				message: cardNumMessage + 'Continue?',
-				name: 'confirm',
+				name: 'confirm'
 			}
 			]).then(function(answers){
 				if (answers.confirm == false) {
 					return menu.main.ask(); 
 				}
-				// otherwise proceed to "go()"
-				menu.practiceFlashcards.go();
+				// otherwise proceed to "go()", sends starting index [0] and allCards as arguments
+				menu.practiceFlashcards.go(0, allCards);
 			});
 		}, // end of menu.practiceFlashcards.startScreen()
-		// .go() handles interface & implementation of flashcard practicing
-		go: function() {
-			console.log(deck.getCards());
-		}
+		// .go() handles interface & implementation of flashcard practicing.
+		// function handles an index and an array of cards as parameters
+		go: function(i, allCards) {
+			// exit condition: if i === allCards.length, return menu.main.ask();
+			if (i === allCards.length) {
+				console.log('You have finished practicing all the flashcards in this deck!\n'
+					+ 'Returning to the main menu...\n');
+				return menu.main.ask();
+			}
+
+			// sets prompt according to values of allCards[i]
+			prompt([
+			{
+				type: 'input',
+				message: allCards[i].front,
+				name: 'input',
+				filter: function(str) {
+					return str.trim();
+				}
+			}]).then(function(answers){
+				// in promise, displays result, sets another confirm prompt to continue.
+				console.log('Your answer: ' + answers.input
+					+ '\nAnswer on back of flashcard: ' + allCards[i].back + '\n');
+
+				// results:
+				if (answers.input.toLowerCase() === allCards[i].back.toLowerCase()) {
+					console.log('You are correct!\n');
+				}
+				else {
+					console.log('Sorry, you are incorrect.\n');
+				}
+
+				// confirm-to-continue prompt:
+				prompt([
+				{
+					type: 'confirm',
+					message: 'Continue?',
+					name: 'confirm'
+				}]).then(function(answers){
+					// if yes, increment i++,
+					// and call menu.practiceFlashcards.go(i, allCards) recursively
+					if (answers.confirm == true) {
+						i++;
+						menu.practiceFlashcards.go(i, allCards);
+					}
+					// if no, return menu.main.ask();
+					if (answers.confirm == false) {
+						console.log('\n\nReturning to the main menu...');
+						return menu.main.ask();
+					}
+				}); // end of confirm prompt promise
+			}); // end of input prompt promise			
+		} // end of menu.practiceFlashcards.go()
 	} // end of menu.practiceFlashcards
-};
+}; // end of menu object
 
 module.exports = menu;
