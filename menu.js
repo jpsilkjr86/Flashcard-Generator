@@ -28,7 +28,7 @@ var menu = {
 				}
 				if (answers.choice === 'Practice your flashcards.') {
 					// console.log('Practice card feature still in development...');
-					return menu.practiceFlashcards();
+					return menu.practiceFlashcards.startScreen();
 				}
 			});
 		}
@@ -153,23 +153,47 @@ var menu = {
 			});
 		}
 	}, // end of menu.clozeCardPrompt
-	practiceFlashcards: function() {
-		let allCards = deck.getCards();
+	// segment of menu front-end that handles flashcard practicing
+	practiceFlashcards: {
+		startScreen: function() {
+			let allCards = deck.getCards();
+			let cardNumMessage = '';
 
-		if (allCards.length === 0) {
-			console.log('\nThere are currently no flashcards in this deck.\n'
-				+ 'Please create some flashcards first and come back later to practice!\n');
-			return menu.main.ask();
-		}
+			// sets the cardNumMessage portion of the startScreen
+			switch (allCards.length) {
+				case 0:
+					console.log('\nThere are currently no flashcards in this deck.\n'
+						+ 'Please create some flashcards first and come back again later!\n');
+					return menu.main.ask();
+					break;
+				case 1:
+					cardNumMessage = '\n\nYou currently have 1 flashcard in your deck.\n';
+					break;
+				default:
+					cardNumMessage = '\n\nYou currently have ' 
+						+ allCards.length + ' flashcards in your deck.\n';
+			}
 
-		if (allCards.length === 1) {
-			console.log('\n\nYou currently have 1 flashcard in your deck.\n');
-			return menu.main.ask();
+			// startScreen prompt
+			prompt([
+			{
+				type: 'confirm',
+				message: cardNumMessage + 'Continue?',
+				name: 'confirm',
+			}
+			]).then(function(answers){
+				if (answers.confirm == false) {
+					return menu.main.ask(); 
+				}
+				// otherwise proceed to "go()"
+				menu.practiceFlashcards.go();
+			});
+		}, // end of menu.practiceFlashcards.startScreen()
+		// .go() handles interface & implementation of flashcard practicing
+		go: function() {
+			console.log(deck.getCards());
 		}
-		
-		console.log('\n\nYou currently have ' + allCards.length + ' flashcards in your deck.\n');
-		return menu.main.ask();
-	}
+	} // end of menu.practiceFlashcards
 };
 
 module.exports = menu;
