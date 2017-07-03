@@ -7,8 +7,8 @@ var prompt = inquirer.createPromptModule();
 // imports BasicCard constructor
 var BasicCard = require('./basic-card.js');
 
-// imports ClozeDeletedCard constructor
-var ClozeDeletedCard = require('./cloze-deleted-card.js');
+// imports ClozeCard constructor
+var ClozeCard = require('./cloze-card.js');
 
 // menu object containing all user prompt information
 var menu = {
@@ -38,7 +38,7 @@ var menu = {
 		questions: [{
 			type: 'list',
 			message: 'What kind of flashcard would you like to create?',
-			choices: ['Basic flashcard', 'Cloze deleted flashcard'],
+			choices: ['Basic flashcard', 'Cloze flashcard'],
 			name: 'choice'
 		}],
 		// prompt function
@@ -48,8 +48,8 @@ var menu = {
 					menu.basicCardPrompt.ask();
 				}
 
-				if (answers.choice === 'Cloze deleted flashcard') {
-					menu.clozeDeletedCardPrompt.ask();
+				if (answers.choice === 'Cloze flashcard') {
+					menu.clozeCardPrompt.ask();
 				}
 			});
 		}
@@ -62,6 +62,7 @@ var menu = {
 			type: 'input',
 			message: 'What text would you like on the front of the card?',
 			name: 'front',
+			// front-end validation
 			validate: function(str) {
 				if (str == null || str == '') {
 					console.log('\n\nEmpty content is not a valid input value.\n')
@@ -73,6 +74,7 @@ var menu = {
 			type: 'input',
 			message: 'What text would you like on the back of the card?',
 			name: 'back',
+			// front-end validation
 			validate: function(str, hash) {
 				if (str == null || str == '') {
 					console.log('\n\nEmpty content is not a valid input value.\n')
@@ -88,26 +90,27 @@ var menu = {
 		// prompt function
 		ask: function() {
 			prompt(menu.basicCardPrompt.questions).then(function(answers){
-				// creates new basic card object (scope safety ensured in constructor)
-				let newBasicCard = BasicCard(answers.front, answers.back);
+				// creates new basic card object (scope safety ensured within constructor itself)
+				let newCard = BasicCard(answers.front, answers.back);
 
-				console.log('\nBasic flashcard successfully created!'
-					+ '\nFront: ' + newBasicCard.front
-					+ '\nBack: ' + newBasicCard.back + '\n');
+				console.log('\nFlashcard successfully created!'
+					+ '\nFront: ' + newCard.front
+					+ '\nBack: ' + newCard.back + '\n');
 
 				// appends to your-cards.txt
-				newBasicCard.addToDeck();
+				newCard.addToDeck();
 			});
 		}
 	}, // end of menu.basicCardPrompt
-	// cloze deleted card prompt content
-	clozeDeletedCardPrompt: {
+	// cloze card prompt content
+	clozeCardPrompt: {
 		questions: [
 		// first question
 		{
 			type: 'input',
 			message: 'What is the complete sentence answer to this flashcard?',
 			name: 'fullAnswer',
+			// front-end validation
 			validate: function(str) {
 				if (str == null || str == '') {
 					console.log('\n\nEmpty content is not a valid input value.\n')
@@ -119,6 +122,7 @@ var menu = {
 			type: 'input',
 			message: 'Which part of the full answer would you like to be omitted via ellipsis?',
 			name: 'omittedPart',
+			// front-end validation
 			validate: function(str, hash) {
 				if (str == null || str == '') {
 					console.log('\n\nEmpty content is not a valid input value.\n')
@@ -140,15 +144,15 @@ var menu = {
 		}],
 		// prompt function
 		ask: function() {
-			prompt(menu.clozeDeletedCardPrompt.questions).then(function(answers){
-				// creates new cloze-deleted card object (scope safety ensured in constructor)
-				let newClozeDeletedCard = ClozeDeletedCard(answers.fullAnswer, answers.omittedPart);
+			prompt(menu.clozeCardPrompt.questions).then(function(answers){
+				// creates new cloze-deleted card object (scope safety ensured within constructor itself)
+				let newCard = ClozeCard(answers.fullAnswer, answers.omittedPart);
 
-				console.log('\nCloze-deleted flashcard successfully created!'
-					+ '\nFront: ' + newClozeDeletedCard.front
-					+ '\nBack: ' + newClozeDeletedCard.back + '\n');
+				console.log('\nFlashcard successfully created!'
+					+ '\nFront: ' + newCard.front
+					+ '\nBack: ' + newCard.back + '\n');
 
-				newClozeDeletedCard.addToDeck();
+				newCard.addToDeck();
 			});
 		}
 	}
