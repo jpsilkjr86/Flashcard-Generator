@@ -15,7 +15,7 @@ var menu = {
 	// main menu, first question user must answer
 	main: function() {
 		console.log('\n ========== MAIN MENU ========== \n');
-		
+		// inquirer prompt		
 		prompt([
 		{
 			type: 'list',
@@ -36,7 +36,7 @@ var menu = {
 	// menu for choosing a card type
 	cardType: function() {
 		console.log('\n ========== CHOOSE A CARD TYPE ========== \n');
-		
+		// inquirer prompt
 		prompt([
 		{
 			type: 'list',
@@ -57,7 +57,7 @@ var menu = {
 	// basic card prompt content
 	basicCardPrompt: function() {
 		console.log('\n ========== CREATE A BASIC FLASHCARD ========== \n');
-		
+		// inquirer prompt
 		prompt([
 		// first question
 		{
@@ -99,14 +99,17 @@ var menu = {
 			let newCard = BasicCard(answers.front, answers.back);
 
 			// appends to your-cards.txt
-			newCard.addToDeck();
+			newCard.addToDeck(function(){
+				return menu.main();
+			});
 
-			return menu.main();
+			// return menu.main();
 		});
 	}, // end of menu.basicCardPrompt
 	// cloze card prompt content
 	clozeCardPrompt: function() {
 		console.log('\n ========== CREATE A CLOZE FLASHCARD ========== \n');
+		// inquirer prompt
 		prompt([
 		// first question
 		{
@@ -155,14 +158,17 @@ var menu = {
 			let newCard = ClozeCard(answers.fullAnswer, answers.omittedPart);
 
 			// appends to your-cards.txt
-			newCard.addToDeck();
+			newCard.addToDeck(function(){
+				return menu.main();
+			});
 
-			return menu.main();
+			// return menu.main();
 		});
 	}, // end of menu.clozeCardPrompt
 	// segment of menu front-end that handles flashcard practicing
 	practiceFlashcards: {
 		startScreen: function() {
+			// calls getCards() and saves returned array as allCards array
 			const allCards = deck.getCards();
 			let cardNumMessage = '';
 

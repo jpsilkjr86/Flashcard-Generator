@@ -6,7 +6,7 @@ var deck = {
 	// filepath of flashcard deck
 	filepath: './your-cards.txt',
 	// method for adding a card to the deck
-	add: function(cardObject) {
+	add: function(cardObject, callback) {
 		// sets variables: contents is stringified card object,
 		// numOfCardsInDeck comes from deck.numOfCards()
 		let contents = JSON.stringify(cardObject);
@@ -23,6 +23,8 @@ var deck = {
 				console.log('\nFlashcard successfully created!'
 					+ '\nFront: ' + cardObject.front
 					+ '\nBack: ' + cardObject.back + '\n');
+
+				callback();
 			});
 		}
 
@@ -38,6 +40,8 @@ var deck = {
 				console.log('\nFlashcard successfully created!'
 					+ '\nFront: ' + cardObject.front
 					+ '\nBack: ' + cardObject.back + '\n');
+
+				callback();
 			});
 		}
 	}, // end of deck.add()

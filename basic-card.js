@@ -12,11 +12,11 @@ var BasicCard = function(front, back) {
 	this.back = back;
 };
 
-BasicCard.prototype.addToDeck = function() {
+BasicCard.prototype.addToDeck = function(callback) {
 	// set variables: contents is the stringified flashcard object,
 	// numOfCardsInDeck is the return value of deck.numOfCards() function.
 	let thisCard = this;
-	deck.add(thisCard);
+	deck.add(thisCard, callback);
 };
 
 module.exports = BasicCard;
