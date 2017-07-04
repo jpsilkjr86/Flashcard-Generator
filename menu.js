@@ -13,52 +13,52 @@ var deck = require('./deck.js');
 // menu object containing all user prompt information
 var menu = {
 	// main menu, first question user must answer
-	main: {
-		questions: [{
+	main: function() {
+		console.log('\n ========== MAIN MENU ========== \n');
+		
+		prompt([
+		{
 			type: 'list',
 			message: 'What would you like to do?',
 			choices: ['Create a new flashcard.', 'Practice your flashcards.'],
 			name: 'choice'
-		}],
-		// prompt function for menu.main
-		ask: function() {
-			console.log('\n ========== MAIN MENU ========== \n');
-			prompt(menu.main.questions).then(function(answers){
-				if (answers.choice === 'Create a new flashcard.') {
-					return menu.cardType.ask();
-				}
-				if (answers.choice === 'Practice your flashcards.') {
-					// console.log('Practice card feature still in development...');
-					return menu.practiceFlashcards.startScreen();
-				}
-			});
 		}
+		]).then(function(answers){
+			if (answers.choice === 'Create a new flashcard.') {
+				return menu.cardType();
+			}
+			if (answers.choice === 'Practice your flashcards.') {
+				// console.log('Practice card feature still in development...');
+				return menu.practiceFlashcards.startScreen();
+			}
+		});
 	}, // end of menu.main
 	// menu for choosing a card type
-	cardType: {
-		questions: [{
+	cardType: function() {
+		console.log('\n ========== CHOOSE A CARD TYPE ========== \n');
+		
+		prompt([
+		{
 			type: 'list',
 			message: 'What kind of flashcard would you like to create?',
 			choices: ['Basic flashcard', 'Cloze flashcard'],
 			name: 'choice'
-		}],
-		// prompt function for menu.cardType
-		ask: function() {
-			console.log('\n ========== CHOOSE A CARD TYPE ========== \n');
-			prompt(menu.cardType.questions).then(function(answers){
-				if (answers.choice === 'Basic flashcard') {
-					menu.basicCardPrompt.ask();
-				}
-
-				if (answers.choice === 'Cloze flashcard') {
-					menu.clozeCardPrompt.ask();
-				}
-			});
 		}
+		]).then(function(answers){
+			if (answers.choice === 'Basic flashcard') {
+				menu.basicCardPrompt();
+			}
+
+			if (answers.choice === 'Cloze flashcard') {
+				menu.clozeCardPrompt();
+			}
+		});
 	}, // end of menu.cardType
 	// basic card prompt content
-	basicCardPrompt: {
-		questions: [
+	basicCardPrompt: function() {
+		console.log('\n ========== CREATE A BASIC FLASHCARD ========== \n');
+		
+		prompt([
 		// first question
 		{
 			type: 'input',
@@ -94,24 +94,20 @@ var menu = {
 				}
 				return true;
 			}
-		}],
-		// prompt function for menu.basicCardPrompt
-		ask: function() {
-			console.log('\n ========== CREATE A BASIC FLASHCARD ========== \n');
-			prompt(menu.basicCardPrompt.questions).then(function(answers){
-				// creates new basic card object (scope safety ensured within constructor itself)
-				let newCard = BasicCard(answers.front, answers.back);
+		}]).then(function(answers){
+			// creates new basic card object (scope safety ensured within constructor itself)
+			let newCard = BasicCard(answers.front, answers.back);
 
-				// appends to your-cards.txt
-				newCard.addToDeck();
+			// appends to your-cards.txt
+			newCard.addToDeck();
 
-				return menu.main.ask();
-			});
-		}
+			return menu.main();
+		});
 	}, // end of menu.basicCardPrompt
 	// cloze card prompt content
-	clozeCardPrompt: {
-		questions: [
+	clozeCardPrompt: function() {
+		console.log('\n ========== CREATE A CLOZE FLASHCARD ========== \n');
+		prompt([
 		// first question
 		{
 			type: 'input',
@@ -154,20 +150,15 @@ var menu = {
 				}
 				return true;
 			}
-		}],
-		// prompt function for menu.clozeCardPrompt
-		ask: function() {
-			console.log('\n ========== CREATE A CLOZE FLASHCARD ========== \n');
-			prompt(menu.clozeCardPrompt.questions).then(function(answers){
-				// creates new cloze-deleted card object (scope safety ensured within constructor itself)
-				let newCard = ClozeCard(answers.fullAnswer, answers.omittedPart);
+		}]).then(function(answers){
+			// creates new cloze-deleted card object (scope safety ensured within constructor itself)
+			let newCard = ClozeCard(answers.fullAnswer, answers.omittedPart);
 
-				// appends to your-cards.txt
-				newCard.addToDeck();
+			// appends to your-cards.txt
+			newCard.addToDeck();
 
-				return menu.main.ask();
-			});
-		}
+			return menu.main();
+		});
 	}, // end of menu.clozeCardPrompt
 	// segment of menu front-end that handles flashcard practicing
 	practiceFlashcards: {
@@ -182,7 +173,7 @@ var menu = {
 				case 0:
 					console.log('\nThere are currently no flashcards in this deck.\n'
 						+ 'Please create some flashcards first and try again later!\n');
-					return menu.main.ask();
+					return menu.main();
 					break;
 				case 1:
 					cardNumMessage = 'You currently have 1 flashcard in your deck.\n';
@@ -201,7 +192,7 @@ var menu = {
 			}
 			]).then(function(answers){
 				if (answers.confirm == false) {
-					return menu.main.ask(); 
+					return menu.main(); 
 				}
 				// otherwise proceed to "go()", sends starting index [0] and allCards as arguments
 				menu.practiceFlashcards.go(0, allCards);
@@ -210,11 +201,11 @@ var menu = {
 		// .go() handles interface & implementation of flashcard practicing.
 		// function handles an index and an array of cards as parameters
 		go: function(i, allCards) {
-			// exit condition: if i === allCards.length, return menu.main.ask();
+			// exit condition: if i === allCards.length, return menu.main();
 			if (i === allCards.length) {
 				console.log('You have finished practicing all the flashcards in this deck!\n'
 					+ 'Returning to the main menu...\n');
-				return menu.main.ask();
+				return menu.main();
 			}
 
 			// sets prompt according to values of allCards[i]
@@ -252,10 +243,10 @@ var menu = {
 						i++;
 						menu.practiceFlashcards.go(i, allCards);
 					}
-					// if no, return menu.main.ask();
+					// if no, return menu.main();
 					if (answers.confirm == false) {
 						console.log('\n\nReturning to the main menu...');
-						return menu.main.ask();
+						return menu.main();
 					}
 				}); // end of confirm prompt promise
 			}); // end of input prompt promise			

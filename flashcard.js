@@ -35,4 +35,4 @@
 var menu = require('./menu.js');
 
 // starts program by displaying the main menu prompt
-menu.main.ask();
+menu.main();
