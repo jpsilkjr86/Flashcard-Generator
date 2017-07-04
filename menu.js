@@ -22,6 +22,7 @@ var menu = {
 		}],
 		// prompt function for menu.main
 		ask: function() {
+			console.log('\n ========== MAIN MENU ========== \n');
 			prompt(menu.main.questions).then(function(answers){
 				if (answers.choice === 'Create a new flashcard.') {
 					return menu.cardType.ask();
@@ -43,6 +44,7 @@ var menu = {
 		}],
 		// prompt function for menu.cardType
 		ask: function() {
+			console.log('\n ========== CHOOSE A CARD TYPE ========== \n');
 			prompt(menu.cardType.questions).then(function(answers){
 				if (answers.choice === 'Basic flashcard') {
 					menu.basicCardPrompt.ask();
@@ -62,6 +64,9 @@ var menu = {
 			type: 'input',
 			message: 'What text would you like on the front of the card?',
 			name: 'front',
+			filter: function(str) {
+				return str.trim();
+			},
 			// front-end validation
 			validate: function(str) {
 				if (str == null || str == '') {
@@ -74,6 +79,9 @@ var menu = {
 			type: 'input',
 			message: 'What text would you like on the back of the card?',
 			name: 'back',
+			filter: function(str) {
+				return str.trim();
+			},
 			// front-end validation
 			validate: function(str, hash) {
 				if (str == null || str == '') {
@@ -89,6 +97,7 @@ var menu = {
 		}],
 		// prompt function for menu.basicCardPrompt
 		ask: function() {
+			console.log('\n ========== CREATE A BASIC FLASHCARD ========== \n');
 			prompt(menu.basicCardPrompt.questions).then(function(answers){
 				// creates new basic card object (scope safety ensured within constructor itself)
 				let newCard = BasicCard(answers.front, answers.back);
@@ -108,6 +117,9 @@ var menu = {
 			type: 'input',
 			message: 'What is the complete sentence answer to this flashcard?',
 			name: 'fullAnswer',
+			filter: function(str) {
+				return str.trim();
+			},
 			// front-end validation
 			validate: function(str) {
 				if (str == null || str == '') {
@@ -120,6 +132,9 @@ var menu = {
 			type: 'input',
 			message: 'Which part of the full answer would you like to be omitted via ellipsis?',
 			name: 'omittedPart',
+			filter: function(str) {
+				return str.trim();
+			},
 			// front-end validation
 			validate: function(str, hash) {
 				if (str == null || str == '') {
@@ -142,6 +157,7 @@ var menu = {
 		}],
 		// prompt function for menu.clozeCardPrompt
 		ask: function() {
+			console.log('\n ========== CREATE A CLOZE FLASHCARD ========== \n');
 			prompt(menu.clozeCardPrompt.questions).then(function(answers){
 				// creates new cloze-deleted card object (scope safety ensured within constructor itself)
 				let newCard = ClozeCard(answers.fullAnswer, answers.omittedPart);
@@ -159,18 +175,20 @@ var menu = {
 			const allCards = deck.getCards();
 			let cardNumMessage = '';
 
+			console.log('\n ========== PRACTICE FLASHCARDS ========== \n');
+
 			// sets the cardNumMessage portion of the startScreen
 			switch (allCards.length) {
 				case 0:
 					console.log('\nThere are currently no flashcards in this deck.\n'
-						+ 'Please create some flashcards first and come back again later!\n');
+						+ 'Please create some flashcards first and try again later!\n');
 					return menu.main.ask();
 					break;
 				case 1:
-					cardNumMessage = '\n\nYou currently have 1 flashcard in your deck.\n';
+					cardNumMessage = 'You currently have 1 flashcard in your deck.\n';
 					break;
 				default:
-					cardNumMessage = '\n\nYou currently have ' 
+					cardNumMessage = 'You currently have ' 
 						+ allCards.length + ' flashcards in your deck.\n';
 			}
 
